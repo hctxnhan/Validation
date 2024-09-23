@@ -1,0 +1,17 @@
+{
+  "name": "validation",
+  "version": "1.0.0",
+  "description": "This is a schema-based validation library.",
+  "main": "index.js",
+  "scripts": {
+    "buildUmd": "cat index.js | npx umd validation | npx uglify-js > dist/validation.umd.min.js"
+  },
+  "keywords": [
+    "validation"
+  ],
+  "author": "hctxnhan",
+  "license": "ISC",
+  "devDependencies": {
+    "umd": "^3.0.3"
+  }
+}
