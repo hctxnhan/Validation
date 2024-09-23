@@ -565,7 +565,7 @@ function validate(schemaFn, data, fullData) {
 //   numOfFollowers: 10000
 // };
 
-Validation.validate = validate;
+Validation.validate = (schema, data) => validate(schema, data, data);
 Validation.exampleSchema = exampleSchema;
 
 return Validation;
