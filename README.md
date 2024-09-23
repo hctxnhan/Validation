@@ -1,4 +1,3 @@
-
 # Validation Library
 
 This JavaScript validation library allows you to easily define and apply validation rules to various data types, including strings, numbers, arrays, objects, and more. It supports custom validation rules and enables complex schema definitions with conditional validation logic.
@@ -34,81 +33,81 @@ const exampleSchema = (data) => ({
   name: [
     {
       validate: [
-        Validate.STRING.isRequired,
-        Validate.STRING.type,
-        Validate.STRING.minLength(3),
-        Validate.STRING.maxLength(20),
+        validation.STRING.isRequired,
+        validation.STRING.type,
+        validation.STRING.minLength(3),
+        validation.STRING.maxLength(20),
       ],
     },
   ],
   age: [
     {
       validate: [
-        Validate.NUMBER.isRequired,
-        Validate.NUMBER.type,
-        Validate.NUMBER.minValue(18),
+        validation.NUMBER.isRequired,
+        validation.NUMBER.type,
+        validation.NUMBER.minValue(18),
       ],
     },
   ],
   birthDate: [
     {
       validate: [
-        Validate.DATE.isRequired,
-        Validate.DATE.type,
-        Validate.DATE.isPast,
+        validation.DATE.isRequired,
+        validation.DATE.type,
+        validation.DATE.isPast,
       ],
     },
   ],
-  isMale: [{ validate: [Validate.BOOLEAN.isRequired, Validate.BOOLEAN.type] }],
+  isMale: [{ validate: [validation.BOOLEAN.isRequired, validation.BOOLEAN.type] }],
   idNumber: [
     {
       validate: [
-        Validate.STRING.type,
-        Validate.STRING.isPattern(/^[0-9]{10}$/),
+        validation.STRING.type,
+        validation.STRING.isPattern(/^[0-9]{10}$/),
       ],
-      when: [Validate.$OTHER("age", Validate.NUMBER.minValue(18))],
+      when: [validation.$OTHER("age", validation.NUMBER.minValue(18))],
     },
     {
-      validate: [Validate.STRING.isEmpty],
-      whenNot: [Validate.$OTHER("age", Validate.NUMBER.minValue(18))],
+      validate: [validation.STRING.isEmpty],
+      whenNot: [validation.$OTHER("age", validation.NUMBER.minValue(18))],
     },
   ],
   email: [
     {
       validate: [
-        Validate.STRING.isRequired,
-        Validate.STRING.type,
-        Validate.STRING.isEmail,
+        validation.STRING.isRequired,
+        validation.STRING.type,
+        validation.STRING.isEmail,
       ],
     },
   ],
-  url: [{ validate: [Validate.STRING.type, Validate.STRING.isUrl] }],
+  url: [{ validate: [validation.STRING.type, validation.STRING.isUrl] }],
   assets: {
-    $beforeAllWhen: [Validate.$OTHER("age", Validate.NUMBER.minValue(18))],
+    $beforeAllWhen: [validation.$OTHER("age", validation.NUMBER.minValue(18))],
     cars: [
       {
         validate: [
-          Validate.ARRAY.isRequired,
-          Validate.ARRAY.type,
-          Validate.ARRAY.minLength(1),
-          Validate.ENUM.oneOf(["toyota", "honda", "ford"]),
+          validation.ARRAY.isRequired,
+          validation.ARRAY.type,
+          validation.ARRAY.minLength(1),
+          validation.ENUM.oneOf(["toyota", "honda", "ford"]),
         ],
       },
     ],
     carTax: [
       {
         validate: [
-          Validate.NUMBER.isRequired,
-          Validate.NUMBER.type,
-          Validate.NUMBER.minValue(100),
-          Validate.NUMBER.isInteger,
-          Validate.NUMBER.isPositive,
+          validation.NUMBER.isRequired,
+          validation.NUMBER.type,
+          validation.NUMBER.minValue(100),
+          validation.NUMBER.isInteger,
+          validation.NUMBER.isPositive,
         ],
         when: [
-          Validate.$OTHER(
+          validation.$OTHER(
             "assets.cars",
-            Validate.ARRAY.type,
-            Validate.ARRAY.minLength(1),
+            validation.ARRAY.type,
+            validation.ARRAY.minLength(1),
           ),
         ],
       },
@@ -116,61 +115,61 @@ const exampleSchema = (data) => ({
     max: [
       {
         validate: [
-          Validate.NUMBER.isRequired,
-          Validate.NUMBER.type,
-          Validate.NUMBER.isInteger,
-          Validate.NUMBER.isPositive,
+          validation.NUMBER.isRequired,
+          validation.NUMBER.type,
+          validation.NUMBER.isInteger,
+          validation.NUMBER.isPositive,
         ],
-        when: [Validate.$OTHER("assets.min", Validate.NUMBER.type)],
+        when: [validation.$OTHER("assets.min", validation.NUMBER.type)],
       },
     ],
     min: [
       {
         validate: [
-          Validate.NUMBER.isRequired,
-          Validate.NUMBER.type,
-          Validate.NUMBER.minValue(0),
-          Validate.NUMBER.maxValue(lodashGet(data, "assets.max")).mgs(
+          validation.NUMBER.isRequired,
+          validation.NUMBER.type,
+          validation.NUMBER.minValue(0),
+          validation.NUMBER.maxValue(lodashGet(data, "assets.max")).mgs(
             "Can not be more than max",
           ),
-          Validate.NUMBER.isInteger,
-          Validate.NUMBER.isPositive,
+          validation.NUMBER.isInteger,
+          validation.NUMBER.isPositive,
         ],
-        when: [Validate.$OTHER("assets.max", Validate.NUMBER.type)],
+        when: [validation.$OTHER("assets.max", validation.NUMBER.type)],
       },
     ],
   },
   numOfFollowers: [
     {
-      $beforeAllWhen: Validate.$OTHER(
+      $beforeAllWhen: validation.$OTHER(
         "url",
-        Validate.STRING.type,
-        Validate.STRING.isUrl,
+        validation.STRING.type,
+        validation.STRING.isUrl,
       ),
     },
     {
       validate: [
-        Validate.NUMBER.isRequired,
-        Validate.NUMBER.type,
-        Validate.NUMBER.between(10000, 500000),
+        validation.NUMBER.isRequired,
+        validation.NUMBER.type,
+        validation.NUMBER.between(10000, 500000),
       ],
-      when: [Validate.$OTHER("age", Validate.NUMBER.minValue(18))],
+      when: [validation.$OTHER("age", validation.NUMBER.minValue(18))],
     },
     {
       validate: [
-        Validate.NUMBER.isRequired,
-        Validate.NUMBER.type,
-        Validate.NUMBER.between(5000, 10000),
+        validation.NUMBER.isRequired,
+        validation.NUMBER.type,
+        validation.NUMBER.between(5000, 10000),
       ],
-      when: [Validate.$OTHER("age", Validate.NUMBER.maxValue(17))],
+      when: [validation.$OTHER("age", validation.NUMBER.maxValue(17))],
     },
   ],
   $refine: [
     {
       validate: [
-        Validate.AGGREGATE.all([
-          Validate.$OTHER("age", Validate.NUMBER.lt(18)),
-          Validate.$OTHER("idNumber", Validate.STRING.isEmpty),
+        validation.AGGREGATE.all([
+          validation.$OTHER("age", validation.NUMBER.lt(18)),
+          validation.$OTHER("idNumber", validation.STRING.isEmpty),
         ]).mgs("idNumber cant be specified for under 18"),
       ],
       path: ["idNumber"],
@@ -328,9 +327,9 @@ If `path` is omitted, then the error is attached to `$refine` property itself in
 $refine: [
   {
     validate: [
-      Validate.AGGREGATE.all([
-        Validate.$OTHER("age", Validate.NUMBER.lt(18)),
-        Validate.$OTHER("idNumber", Validate.STRING.isEmpty),
+      validation.AGGREGATE.all([
+        validation.$OTHER("age", validation.NUMBER.lt(18)),
+        validation.$OTHER("idNumber", validation.STRING.isEmpty),
       ]).mgs("idNumber cant be specified for under 18"),
     ],
     path: ["idNumber"],
