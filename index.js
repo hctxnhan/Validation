@@ -223,36 +223,36 @@ const Validate = {
   },
   DATE: {
     type: createValidationRule({
-      validate: ({ currentValue }) => currentValue instanceof Date,
+      validate: ({ currentValue }) => currentValue instanceof Date || new Date(currentValue) !== 'Invalid Date',
       message: '{field_key} must be a date'
     }),
     isRequired: createValidationRule({
       validate: ({ currentValue }) =>
-        currentValue !== null && currentValue !== undefined,
+        new Date(currentValue) !== null && new Date(currentValue) !== undefined,
       message: '{field_key} is required'
     }),
     isBefore: (date) =>
       createValidationRule({
-        validate: ({ currentValue }) => currentValue < date,
+        validate: ({ currentValue }) => new Date(currentValue) < date,
         message: '{field_key} must be before {value}'
       }),
     isAfter: (date) =>
       createValidationRule({
-        validate: ({ currentValue }) => currentValue > date,
+        validate: ({ currentValue }) => new Date(currentValue) > date,
         message: '{field_key} must be after {value}'
       }),
     isBetween: (startDate, endDate) =>
       createValidationRule({
         validate: ({ currentValue }) =>
-          currentValue > startDate && currentValue < endDate,
+          new Date(currentValue) > startDate && new Date(currentValue) < endDate,
         message: '{field_key} must be between {value} and {value}'
       }),
     isPast: createValidationRule({
-      validate: ({ currentValue }) => currentValue < new Date(),
+      validate: ({ currentValue }) => new Date(currentValue) < new Date(),
       message: '{field_key} must be in the past'
     }),
     isFuture: createValidationRule({
-      validate: ({ currentValue }) => currentValue > new Date(),
+      validate: ({ currentValue }) => new Date(currentValue) > new Date(),
       message: '{field_key} must be in the future'
     })
   },
@@ -411,7 +411,7 @@ const exampleSchema = (data) => ({
     min: [
       {
         validate: [
-          Validate.NUMBER.isRequired,
+          Validate.NUMBER.isRequired.mgs('Min is required'),
           Validate.NUMBER.type,
           Validate.NUMBER.minValue(0),
           Validate.NUMBER.maxValue(lodashGet(data, 'assets.max')).mgs(
@@ -551,7 +551,7 @@ function validate(schemaFn, data, fullData) {
 // const data = {
 //   name: 'John Doe',
 //   age: 16,
-//   birthDate: new Date('1990-01-01'),
+//   birthDate: '1990-01-01',
 //   isMale: true,
 //   idNumber: '1234567890',
 //   email: '@gmail.com',
@@ -565,7 +565,13 @@ function validate(schemaFn, data, fullData) {
 //   numOfFollowers: 10000
 // };
 
+
+
 Validate.validate = (schema, data) => validate(schema, data, data);
 Validate.exampleSchema = exampleSchema;
+
+// const validationA = Validate
+
+// console.log(validationA.validate(validationA.exampleSchema, data));
 
 return Validate;
